@@ -13,7 +13,7 @@ items:
     lookupPolicy:
       local: false
     tags:
-    - annotations: {}
+    - annotations: null
       from:
         kind: DockerImage
         name: vault:latest
@@ -28,6 +28,7 @@ items:
       \ = true\n"
   kind: ConfigMap
   metadata:
+    annotations: {}
     creationTimestamp: null
     labels:
       app: vault
@@ -58,6 +59,21 @@ items:
       requests:
         storage: 5Gi
     volumeName: vault-logs-data
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    creationTimestamp: null
+    name: builder
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    creationTimestamp: null
+    name: default
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    creationTimestamp: null
+    name: deployer
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
@@ -115,7 +131,7 @@ items:
             value: 'true'
           - name: VAULT_ADDR
             value: http://127.0.0.1:8200
-          image: vault/vault:latest
+          image: vault@sha256:9ee0518036323fad67911d31ef123748ee8c0ba43ed0daa1f4c4bcf2c7f3de6e
           imagePullPolicy: IfNotPresent
           name: vault
           ports:
@@ -156,13 +172,12 @@ items:
 - apiVersion: v1
   kind: Service
   metadata:
-    annotations:
-      openshift.io/generated-by: OpenShiftNewApp
     creationTimestamp: null
     labels:
       app: vault
     name: vault
   spec:
+    externalTrafficPolicy: Cluster
     ports:
     - name: 8200-tcp
       port: 8200
@@ -172,6 +187,6 @@ items:
       app: vault
       deploymentconfig: vault
     sessionAffinity: None
-    type: ClusterIP
+    type: NodePort
 kind: List
 metadata: {}
