@@ -33,12 +33,12 @@ for project in $OC_PROJECTS; do
         read -p "Project $project does not exist in OpenShift. Create? (yes/no) " createproject
         if [ "$createproject" == 'yes' ]; then
           sudo oc new-project "$project"
-          vault read -field content "secret/openshift/$project/$secret" | sudo oc create -f -
+          vault read -field content "secret/openshift/$project/$secret" | sudo oc create -n "$project" -f -
           cleanup
           continue
         fi
       elif [[ $(cat /tmp/vault2ocerror) =  *"secrets"*"not found"* ]]; then
-        vault read -field content "secret/openshift/$project/$secret" | sudo oc create -f -
+        vault read -field content "secret/openshift/$project/$secret" | sudo oc create -n "$project" -f -
         cleanup
         continue
       else
@@ -59,7 +59,7 @@ for project in $OC_PROJECTS; do
 
       read -p 'Do you want to overwrite the one in OpenShift? (yes/no) ' answer
       if [ "$answer" == 'yes' ]; then
-        vault read -field content "secret/openshift/$project/$secret" | sudo oc apply -f -
+        vault read -field content "secret/openshift/$project/$secret" | sudo oc apply -n "$project" -f -
         cleanup
         continue
       else
