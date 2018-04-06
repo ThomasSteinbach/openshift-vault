@@ -38,27 +38,27 @@ items:
   metadata:
     annotations: {}
     creationTimestamp: null
-    name: file-data
+    name: vault-file
   spec:
     accessModes:
     - ReadWriteOnce
     resources:
       requests:
         storage: 5Gi
-    volumeName: vault-file-data
+    volumeName: vault-vault-file
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
     annotations: {}
     creationTimestamp: null
-    name: logs-data
+    name: vault-logs
   spec:
     accessModes:
     - ReadWriteOnce
     resources:
       requests:
         storage: 5Gi
-    volumeName: vault-logs-data
+    volumeName: vault-vault-logs
 - apiVersion: v1
   kind: ServiceAccount
   metadata:
@@ -142,21 +142,21 @@ items:
           terminationMessagePolicy: File
           volumeMounts:
           - mountPath: /vault/file
-            name: file-data
+            name: vault-file
           - mountPath: /vault/logs
-            name: logs-data
+            name: vault-logs
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         schedulerName: default-scheduler
         securityContext: {}
         terminationGracePeriodSeconds: 30
         volumes:
-        - name: file-data
+        - name: vault-file
           persistentVolumeClaim:
-            claimName: file-data
-        - name: logs-data
+            claimName: vault-file
+        - name: vault-logs
           persistentVolumeClaim:
-            claimName: logs-data
+            claimName: vault-logs
     test: false
     triggers:
     - type: ConfigChange
