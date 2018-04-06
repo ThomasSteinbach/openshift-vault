@@ -62,16 +62,19 @@ items:
 - apiVersion: v1
   kind: ServiceAccount
   metadata:
+    annotations: {}
     creationTimestamp: null
     name: builder
 - apiVersion: v1
   kind: ServiceAccount
   metadata:
+    annotations: {}
     creationTimestamp: null
     name: default
 - apiVersion: v1
   kind: ServiceAccount
   metadata:
+    annotations: {}
     creationTimestamp: null
     name: deployer
 - apiVersion: v1
@@ -172,6 +175,7 @@ items:
 - apiVersion: v1
   kind: Service
   metadata:
+    annotations: {}
     creationTimestamp: null
     labels:
       app: vault
